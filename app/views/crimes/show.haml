@@ -1,13 +1,7 @@
 %table
   %tr
-    %th Sunday
-    %th Monday
-    %th Tuesday
-    %th Wednesday
-    %th Thursday
-    %th Friday
-    %th Saturday
-    %th Other
+    - @dow.each do |dow|
+      %th= dow[0]
   %tr
     - @dow.each do |dow|
       %td= dow[1]
