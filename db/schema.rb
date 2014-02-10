@@ -11,9 +11,9 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140210061427) do
+ActiveRecord::Schema.define(:version => 20140210074345) do
 
-  create_table "crime", :force => true do |t|
+  create_table "crimes", :force => true do |t|
     t.string "FROMDATE"
     t.string "TODATE"
     t.string "WEAPONTYPE"
@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(:version => 20140210061427) do
     t.string "NEIGHBORHOOD"
     t.string "LIGHTING"
     t.string "DOMESTIC"
-    t.string "WEAPOND_TYPE"
+    t.string "WEAPON_TYPE"
     t.string "DAY_WEEK"
     t.string "COMPUTEDCRIMECODEDESC"
     t.string "STREETNAME"
