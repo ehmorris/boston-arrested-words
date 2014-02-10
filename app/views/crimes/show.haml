@@ -1,2 +1,30 @@
-- @crime.each do |crime|
-  %p= crime.UNUSUALACTIONS
+%table
+  %tr
+    %th Sunday
+    %th Monday
+    %th Tuesday
+    %th Wednesday
+    %th Thursday
+    %th Friday
+    %th Saturday
+    %th Other
+  %tr
+    %td= @sunday
+    %td= @monday
+    %td= @tuesday
+    %td= @wednesday
+    %td= @thursday
+    %td= @friday
+    %td= @saturday
+    %td= @other
+
+%table
+  - @neighborhoods.each do |neighborhood|
+    %tr
+      %td= neighborhood
+
+%table
+  - @crime.each do |crime|
+    %tr
+      %td= crime.DAY_WEEK
+      %td= crime.NEIGHBORHOOD
