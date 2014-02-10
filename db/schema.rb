@@ -11,6 +11,26 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 0) do
+ActiveRecord::Schema.define(:version => 20140210061427) do
+
+  create_table "crime", :force => true do |t|
+    t.string "FROMDATE"
+    t.string "TODATE"
+    t.string "WEAPONTYPE"
+    t.string "BUILDINGTYPE"
+    t.string "PLACEOFENTRY"
+    t.string "SUSPECTTRANSPORTATION"
+    t.string "VICTIMACTIVITY"
+    t.string "UNUSUALACTIONS"
+    t.string "WEATHER"
+    t.string "NEIGHBORHOOD"
+    t.string "LIGHTING"
+    t.string "DOMESTIC"
+    t.string "WEAPOND_TYPE"
+    t.string "DAY_WEEK"
+    t.string "COMPUTEDCRIMECODEDESC"
+    t.string "STREETNAME"
+    t.string "XSTREETNAME"
+  end
 
 end
