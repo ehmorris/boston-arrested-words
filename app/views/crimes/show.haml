@@ -9,14 +9,8 @@
     %th Saturday
     %th Other
   %tr
-    %td= @sunday
-    %td= @monday
-    %td= @tuesday
-    %td= @wednesday
-    %td= @thursday
-    %td= @friday
-    %td= @saturday
-    %td= @other
+    - @dow.each do |dow|
+      %td= dow[1]
 
 %table
   - @neighborhoods.each do |neighborhood|
