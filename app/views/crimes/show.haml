@@ -13,3 +13,17 @@
     %tr
       %th= neighborhood[0]
       %td= neighborhood[1]
+
+%h3 Crimes by weather
+%table
+  - @crimes_by_weather.each do |weather|
+    %tr
+      %th= weather[0]
+      %td= weather[1]
+
+%h3 Crimes by lighting
+%table
+  - @crimes_by_lighting.each do |lighting|
+    %tr
+      %th= lighting[0]
+      %td= lighting[1]
