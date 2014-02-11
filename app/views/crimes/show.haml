@@ -1,3 +1,4 @@
+%h3 Crimes by DOW
 %table
   %tr
     - @dow.each do |dow|
@@ -6,13 +7,9 @@
     - @dow.each do |dow|
       %td= dow[1]
 
+%h3 Crimes by neighborhood
 %table
   - @neighborhoods.each do |neighborhood|
     %tr
-      %td= neighborhood
-
-%table
-  - @crime.each do |crime|
-    %tr
-      %td= crime.DAY_WEEK
-      %td= crime.NEIGHBORHOOD
+      %th= neighborhood[0]
+      %td= neighborhood[1]

@@ -1,6 +1,17 @@
 class CrimesController < ApplicationController
   def show
-    @dow = {
+    @dow = number_of_crimes_by_dow
+
+    @neighborhoods = number_of_crimes_by_neighborhood
+    @neighborhoods = @neighborhoods
+      .sort_by { |neighborhood, crime_count| crime_count }
+      .reverse!
+  end
+
+  private
+
+  def number_of_crimes_by_dow
+    dow = {
       'sunday' => 0,
       'monday' => 0,
       'tuesday' => 0,
@@ -12,17 +23,27 @@ class CrimesController < ApplicationController
     }
 
     Crime.all.each do |crime|
-      if !crime.DAY_WEEK.nil? and @dow[crime.DAY_WEEK.downcase]
-        @dow[crime.DAY_WEEK.downcase] = @dow[crime.DAY_WEEK.downcase] + 1
+      if !crime.day_week.nil? and dow[crime.day_week.downcase]
+        dow[crime.day_week.downcase] = dow[crime.day_week.downcase] + 1
       else
-        @dow['other'] = @dow['other'] + 1
+        dow['other'] = dow['other'] + 1
       end
     end
 
-    @neighborhoods = Crime.select('DISTINCT "NEIGHBORHOOD"')
-      .map(&:NEIGHBORHOOD)
-      .reject(&:nil?)
+    dow
+  end
 
-    @crime = Crime.all
+  def number_of_crimes_by_neighborhood
+    neighborhoods = {}
+
+    Crime.select('DISTINCT "neighborhood"')
+      .map(&:neighborhood)
+      .reject(&:nil?)
+      .each do |neighborhood|
+      crime_count = Crime.where("neighborhood = ?", neighborhood).count
+      neighborhoods[neighborhood] = crime_count
+    end
+
+    neighborhoods
   end
 end
