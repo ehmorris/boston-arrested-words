@@ -1,3 +1,12 @@
+%h3 Most common words
+%table
+  - @all_words.each do |neighborhood|
+    %tr
+      %th= neighborhood[0]
+      %td
+        - freq = neighborhood[1].inject(Hash.new(0)) { |h,v| h[v] += 1; h }
+        = neighborhood[1].max_by { |v| freq[v] }
+
 %h3 Crimes by DOW
 %table
   %tr

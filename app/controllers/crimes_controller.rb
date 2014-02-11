@@ -2,6 +2,8 @@ class CrimesController < ApplicationController
   def show
     @dow = number_of_crimes_by_dow
 
+    @all_words = most_common_word_by_neighborhood
+
     @neighborhoods = number_of_crimes_by_neighborhood
     @neighborhoods = @neighborhoods
       .sort_by { |neighborhood, crime_count| crime_count }
@@ -19,6 +21,31 @@ class CrimesController < ApplicationController
   end
 
   private
+
+  def most_common_word_by_neighborhood
+    words = {}
+
+    Crime.select('DISTINCT "neighborhood"')
+      .map(&:neighborhood)
+      .reject(&:nil?)
+      .each do |neighborhood|
+
+      words[neighborhood] = []
+
+      unusualactions = Crime.select(:unusualactions)
+        .where("neighborhood = ?", neighborhood)
+        .map(&:unusualactions)
+        .reject(&:nil?)
+        .each do |sentence|
+
+        sentence.split(' ').each do |word|
+          words[neighborhood].push word
+        end
+      end
+    end
+
+    words
+  end
 
   def number_of_crimes_by_dow
     dow = {
@@ -50,6 +77,7 @@ class CrimesController < ApplicationController
       .map(&:neighborhood)
       .reject(&:nil?)
       .each do |neighborhood|
+
       crime_count = Crime.where("neighborhood = ?", neighborhood).count
       if crime_count > 150
         neighborhoods[neighborhood] = crime_count
@@ -66,6 +94,7 @@ class CrimesController < ApplicationController
       .map(&:weather)
       .reject(&:nil?)
       .each do |weather|
+
       crime_count = Crime.where("weather = ?", weather).count
       if crime_count > 150
         crimes[weather] = crime_count
@@ -82,6 +111,7 @@ class CrimesController < ApplicationController
       .map(&:lighting)
       .reject(&:nil?)
       .each do |lighting|
+
       crime_count = Crime.where("lighting = ?", lighting).count
       if crime_count > 150
         crimes[lighting] = crime_count
