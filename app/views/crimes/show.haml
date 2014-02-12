@@ -18,7 +18,7 @@
 
 %h3 Crimes by neighborhood
 %table
-  - @neighborhoods.each do |neighborhood|
+  - @crimes_by_neighborhood.each do |neighborhood|
     %tr
       %th= neighborhood[0]
       %td= neighborhood[1]

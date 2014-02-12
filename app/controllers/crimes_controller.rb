@@ -4,20 +4,9 @@ class CrimesController < ApplicationController
 
     @all_words = most_common_word_by_neighborhood
 
-    @neighborhoods = number_of_crimes_by_neighborhood
-    @neighborhoods = @neighborhoods
-      .sort_by { |neighborhood, crime_count| crime_count }
-      .reverse!
-
-    @crimes_by_weather = number_of_crimes_by_weather
-    @crimes_by_weather = @crimes_by_weather
-      .sort_by { |weather, crime_count| crime_count }
-      .reverse!
-
-    @crimes_by_lighting = number_of_crimes_by_lighting
-    @crimes_by_lighting = @crimes_by_lighting
-      .sort_by { |lighting, crime_count| crime_count }
-      .reverse!
+    @crimes_by_neighborhood = number_of_crimes_by_column 'neighborhood', 10
+    @crimes_by_weather = number_of_crimes_by_column 'weather', 10
+    @crimes_by_lighting = number_of_crimes_by_column 'lighting', 10
   end
 
   private
@@ -70,54 +59,18 @@ class CrimesController < ApplicationController
     dow
   end
 
-  def number_of_crimes_by_neighborhood
-    neighborhoods = {}
+  def number_of_crimes_by_column column_name, number_of_results
+    crimes_per_column_type = {}
 
-    Crime.select('DISTINCT "neighborhood"')
-      .map(&:neighborhood)
+    Crime.select("DISTINCT \"#{column_name}\"")
+      .map(&:"#{column_name}")
       .reject(&:nil?)
-      .each do |neighborhood|
+      .each do |unique_column_type|
 
-      crime_count = Crime.where("neighborhood = ?", neighborhood).count
-      if crime_count > 150
-        neighborhoods[neighborhood] = crime_count
-      end
+      crime_count = Crime.where("#{column_name} = ?", unique_column_type).count
+      crimes_per_column_type[unique_column_type] = crime_count
     end
 
-    neighborhoods
-  end
-
-  def number_of_crimes_by_weather
-    crimes = {}
-
-    Crime.select('DISTINCT "weather"')
-      .map(&:weather)
-      .reject(&:nil?)
-      .each do |weather|
-
-      crime_count = Crime.where("weather = ?", weather).count
-      if crime_count > 150
-        crimes[weather] = crime_count
-      end
-    end
-
-    crimes
-  end
-
-  def number_of_crimes_by_lighting
-    crimes = {}
-
-    Crime.select('DISTINCT "lighting"')
-      .map(&:lighting)
-      .reject(&:nil?)
-      .each do |lighting|
-
-      crime_count = Crime.where("lighting = ?", lighting).count
-      if crime_count > 150
-        crimes[lighting] = crime_count
-      end
-    end
-
-    crimes
+    crimes_per_column_type.sort_by { |v, k| k }.reverse!.first(number_of_results)
   end
 end
