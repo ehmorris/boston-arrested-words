@@ -1,19 +1,22 @@
-%h3 Most common words
+%h3 Most common words by lighting
 %table
-  - @all_words.each do |neighborhood|
+  - @common_word_by_lighting.each do |lighting|
     %tr
-      %th= neighborhood[0]
-      %td
-        - freq = neighborhood[1].inject(Hash.new(0)) { |h,v| h[v] += 1; h }
-        = neighborhood[1].max_by { |v| freq[v] }
+      %th= lighting[0]
+      %td= lighting[1]
+
+%h3 Most common words by DOW
+%table
+  - @common_word_by_dow.each do |dow_word|
+    %tr
+      %th= dow_word[0]
+      %td= dow_word[1]
 
 %h3 Crimes by DOW
 %table
-  %tr
-    - @dow.each do |dow|
+  - @crimes_by_dow.each do |dow|
+    %tr
       %th= dow[0]
-  %tr
-    - @dow.each do |dow|
       %td= dow[1]
 
 %h3 Crimes by neighborhood
