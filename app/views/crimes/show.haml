@@ -1,41 +1,65 @@
-%h3 Most common words by lighting
-%table
-  - @common_word_by_lighting.each do |lighting|
-    %tr
-      %th= lighting[0]
-      %td= lighting[1]
+%h3 Most fucks given per neighborhood
+%section
+  %table
+    - @neighborhood_fucks_given.each do |neighborhood, word_count|
+      %tr
+        %th= neighborhood
+        %td= word_count
 
-%h3 Most common words by DOW
-%table
-  - @common_word_by_dow.each do |dow_word|
-    %tr
-      %th= dow_word[0]
-      %td= dow_word[1]
+%section
+  %h3 Most "bitch" per neighborhood
+  %table
+    - @neighborhood_bitch.each do |neighborhood, word_count|
+      %tr
+        %th= neighborhood
+        %td= word_count
 
-%h3 Crimes by DOW
-%table
-  - @crimes_by_dow.each do |dow|
-    %tr
-      %th= dow[0]
-      %td= dow[1]
+%section
+  %h3 Most "kill" per neighborhood
+  %table
+    - @neighborhood_kill.each do |neighborhood, word_count|
+      %tr
+        %th= neighborhood
+        %td= word_count
 
-%h3 Crimes by neighborhood
-%table
-  - @crimes_by_neighborhood.each do |neighborhood|
-    %tr
-      %th= neighborhood[0]
-      %td= neighborhood[1]
+-#%h3 Most common words by lighting
+-#%table
+  -#- @common_word_by_lighting.each do |lighting|
+    -#%tr
+      -#%th= lighting[0]
+      -#%td= lighting[1]
 
-%h3 Crimes by weather
-%table
-  - @crimes_by_weather.each do |weather|
-    %tr
-      %th= weather[0]
-      %td= weather[1]
+-#%h3 Most common words by DOW
+-#%table
+  -#- @common_word_by_dow.each do |dow_word|
+    -#%tr
+      -#%th= dow_word[0]
+      -#%td= dow_word[1]
 
-%h3 Crimes by lighting
-%table
-  - @crimes_by_lighting.each do |lighting|
-    %tr
-      %th= lighting[0]
-      %td= lighting[1]
+-#%h3 Crimes by DOW
+-#%table
+  -#- @crimes_by_dow.each do |dow|
+    -#%tr
+      -#%th= dow[0]
+      -#%td= dow[1]
+
+-#%h3 Crimes by neighborhood
+-#%table
+  -#- @crimes_by_neighborhood.each do |neighborhood|
+    -#%tr
+      -#%th= neighborhood[0]
+      -#%td= neighborhood[1]
+
+-#%h3 Crimes by weather
+-#%table
+  -#- @crimes_by_weather.each do |weather|
+    -#%tr
+      -#%th= weather[0]
+      -#%td= weather[1]
+
+-#%h3 Crimes by lighting
+-#%table
+  -#- @crimes_by_lighting.each do |lighting|
+    -#%tr
+      -#%th= lighting[0]
+      -#%td= lighting[1]

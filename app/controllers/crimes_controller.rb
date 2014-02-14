@@ -1,22 +1,45 @@
 class CrimesController < ApplicationController
   def show
-    @common_word_by_neighborhood = most_unusual_action_by_column 'neighborhood'
-    @common_word_by_lighting = most_unusual_action_by_column 'lighting'
-    @common_word_by_dow = most_unusual_action_by_column 'day_week'
-    @crimes_by_dow = number_of_crimes_by_column 'day_week', 7
-    @crimes_by_neighborhood = number_of_crimes_by_column 'neighborhood', 10
-    @crimes_by_weather = number_of_crimes_by_column 'weather', 10
-    @crimes_by_lighting = number_of_crimes_by_column 'lighting', 10
+    @neighborhood_fucks_given = most_common_neighborhoods_per_word 'fuck'
+    @neighborhood_bitch = most_common_neighborhoods_per_word 'bitch'
+    @neighborhood_kill = most_common_neighborhoods_per_word 'kill'
+    #@common_word_by_neighborhood = most_unusual_action_by_column 'neighborhood'
+    #@common_word_by_lighting = most_unusual_action_by_column 'lighting'
+    #@common_word_by_dow = most_unusual_action_by_column 'day_week'
+    #@crimes_by_dow = number_of_crimes_by_column 'day_week', 7
+    #@crimes_by_neighborhood = number_of_crimes_by_column 'neighborhood', 10
+    #@crimes_by_weather = number_of_crimes_by_column 'weather', 10
+    #@crimes_by_lighting = number_of_crimes_by_column 'lighting', 10
   end
 
   private
 
+  def most_common_neighborhoods_per_word word
+    all_unusual_actions_by_neighborhood =
+      all_unusual_actions_by_column 'neighborhood'
+
+    word_occurrence_per_neighborhood = {}
+
+    all_unusual_actions_by_neighborhood.each do |neighborhood, unusual_action_words|
+      word_occurrence_per_neighborhood[neighborhood] = 0
+
+      unusual_action_words.each do |unusual_action_word|
+        if unusual_action_word.downcase == word.downcase
+          word_occurrence_per_neighborhood[neighborhood] =
+            word_occurrence_per_neighborhood[neighborhood] + 1
+        end
+      end
+    end
+
+    word_occurrence_per_neighborhood.sort_by { |v, k| k }.reverse!.first(15)
+  end
+
   def most_unusual_action_by_column column_name
     most_unusual_actions = all_unusual_actions_by_column column_name
 
-    most_unusual_actions.each do |unique_column_values_and_words|
-      most_unusual_actions[unique_column_values_and_words[0]] =
-        most_common_word_in_array(unique_column_values_and_words[1])
+    most_unusual_actions.each do |unique_column_value, unusual_actions|
+      most_unusual_actions[unique_column_value] =
+        most_common_word_in_array(unusual_actions)
     end
   end
 
