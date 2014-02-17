@@ -5,10 +5,14 @@ class CrimesController < ApplicationController
     @neighborhood_fucks_given = most_common_neighborhoods_per_word 'fuck'
     @neighborhood_kill = most_common_neighborhoods_per_word 'kill'
     @common_word_by_neighborhood = most_unusual_action_by_column 'neighborhood'
-    @crimes_by_neighborhood = number_of_crimes_by_column 'neighborhood', 10
+    @crimes_by_neighborhood = number_of_crimes_by_column 'neighborhood', 15
   end
 
   private
+
+  def crime_count_over_time
+    
+  end
 
   def most_common_neighborhoods_per_word word
     all_unusual_actions_by_neighborhood =
@@ -81,6 +85,6 @@ class CrimesController < ApplicationController
   end
 
   def filter_filler_word word
-    !Crime.stopwords.include? word.downcase
+    (!Crime.stopwords.include? word.downcase) && word.length > 2
   end
 end
