@@ -3,14 +3,30 @@ class CrimesController < ApplicationController
 
   def show
     @neighborhood_fucks_given = most_common_neighborhoods_per_word 'fuck'
-    @neighborhood_kill = most_common_neighborhoods_per_word 'kill'
     @common_word_by_neighborhood = most_unusual_action_by_column 'neighborhood'
     @crimes_by_neighborhood = number_of_crimes_by_column 'neighborhood', 15
+    @crimes_per_date = crime_count_over_time
   end
 
   private
 
   def crime_count_over_time
+    crime_count_per_date = {}
+
+    Crime.all.each do |crime|
+      begin
+        fromdate = Date.parse crime.fromdate
+        crime_count_per_date[fromdate] ||= 1 
+        crime_count_per_date[fromdate] = 
+          crime_count_per_date[fromdate] + 1
+      rescue ArgumentError
+      end
+    end
+
+    crime_count_per_date
+  end
+
+  def word_over_time word
     
   end
 
