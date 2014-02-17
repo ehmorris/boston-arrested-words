@@ -10,3 +10,5 @@ gem 'uglifier', '>= 1.0.3'
 
 gem 'jquery-rails'
 gem 'bourbon'
+
+gem 'ruby-stemmer'

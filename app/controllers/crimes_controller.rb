@@ -1,15 +1,11 @@
 class CrimesController < ApplicationController
+  require 'lingua/stemmer'
+
   def show
     @neighborhood_fucks_given = most_common_neighborhoods_per_word 'fuck'
-    @neighborhood_bitch = most_common_neighborhoods_per_word 'bitch'
     @neighborhood_kill = most_common_neighborhoods_per_word 'kill'
-    #@common_word_by_neighborhood = most_unusual_action_by_column 'neighborhood'
-    #@common_word_by_lighting = most_unusual_action_by_column 'lighting'
-    #@common_word_by_dow = most_unusual_action_by_column 'day_week'
-    #@crimes_by_dow = number_of_crimes_by_column 'day_week', 7
-    #@crimes_by_neighborhood = number_of_crimes_by_column 'neighborhood', 10
-    #@crimes_by_weather = number_of_crimes_by_column 'weather', 10
-    #@crimes_by_lighting = number_of_crimes_by_column 'lighting', 10
+    @common_word_by_neighborhood = most_unusual_action_by_column 'neighborhood'
+    @crimes_by_neighborhood = number_of_crimes_by_column 'neighborhood', 10
   end
 
   private
@@ -20,11 +16,13 @@ class CrimesController < ApplicationController
 
     word_occurrence_per_neighborhood = {}
 
+    stemmer = ::Lingua::Stemmer.new(:language => 'en')
+
     all_unusual_actions_by_neighborhood.each do |neighborhood, unusual_action_words|
       word_occurrence_per_neighborhood[neighborhood] = 0
 
       unusual_action_words.each do |unusual_action_word|
-        if unusual_action_word.downcase == word.downcase
+        if stemmer.stem(unusual_action_word.downcase) == stemmer.stem(word.downcase)
           word_occurrence_per_neighborhood[neighborhood] =
             word_occurrence_per_neighborhood[neighborhood] + 1
         end
@@ -66,7 +64,8 @@ class CrimesController < ApplicationController
   end
 
   def most_common_word_in_array array
-    freq = array.inject(Hash.new(0)) { |k, v| k[v] += 1; k }
+    stemmer = ::Lingua::Stemmer.new(:language => 'en')
+    freq = array.inject(Hash.new(0)) { |k, v| v = stemmer.stem(v); k[v] += 1; k }
     array.max_by { |v| freq[v] }
   end
 
