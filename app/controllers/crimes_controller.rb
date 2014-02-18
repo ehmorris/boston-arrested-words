@@ -2,18 +2,56 @@ class CrimesController < ApplicationController
   require 'lingua/stemmer'
 
   def show
-    @neighborhood_fucks_given = most_common_neighborhoods_per_word 'fuck'
+    #@popular_weapons = number_of_crimes_by_column 'weapon_type', 10
+    #@neighborhood_fucks_given = most_common_neighborhoods_per_word 'fuck'
     @common_word_by_neighborhood = most_unusual_action_by_column 'neighborhood'
-    @crimes_by_neighborhood = number_of_crimes_by_column 'neighborhood', 15
-    @crimes_per_date = crime_count_over_time
+    @crimes_by_neighborhood = number_of_crimes_by_column 'neighborhood', 40
+    #@crimes_per_date_dorchester = crime_count_over_time_dorchester
+    #@crimes_per_date = crime_count_over_time
   end
 
   private
+
+  def all_actions
+    yes_words = ['i', 'im', 'you', 'youre', 'my', 'mine', 'kill', 'bitch', 'fuck', 'knife', 'shot', 'shots', 'forced']
+
+    crimes = Crime.all.map(&:unusualactions)
+    crimes.each_with_index do |crime, index|
+      if crime.nil?
+        crimes.delete_at index
+      else
+        crime_words_array = crime.split(' ').map!{|w| w.downcase.strip}
+        intersect = crime_words_array & yes_words
+        if intersect.length <= 0
+          crimes.delete_at index
+        end
+      end
+    end
+
+    crimes
+  end
 
   def crime_count_over_time
     crime_count_per_date = {}
 
     Crime.all.each do |crime|
+      begin
+        fromdate = Date.parse crime.fromdate
+        crime_count_per_date[fromdate] ||= 1 
+        crime_count_per_date[fromdate] = 
+          crime_count_per_date[fromdate] + 1
+      rescue ArgumentError
+      end
+    end
+
+    crime_count_per_date
+  end
+
+  def crime_count_over_time_dorchester
+    neighborhoods = ['UPHAMS CORNER', 'NORTH DORCHESTER', 'DORCHESTER', 'MID DORCHESTER']
+    crime_count_per_date = {}
+
+    Crime.where('neighborhood = ? OR neighborhood = ? OR neighborhood = ? OR neighborhood = ?', 'DORCHESTER', 'MID DORCHESTER', 'NORTH DORCHESTER', 'UPHAMS CORNER').each do |crime|
       begin
         fromdate = Date.parse crime.fromdate
         crime_count_per_date[fromdate] ||= 1 
