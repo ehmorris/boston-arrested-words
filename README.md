@@ -6,6 +6,7 @@
 * run the server with `rails s`
 
 #### Resources
+- [Chartkick](http://chartkick.com/)
 - [OpenRefine](http://openrefine.org/)
 - [The data](https://data.cityofboston.gov/Public-Safety/Crime-Incident-Reports/7cdf-6fgx)
 - [A neighborhood map](http://bostonography.com/2013/neighborhoods-as-seen-by-the-people/)
